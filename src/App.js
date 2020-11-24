@@ -1,10 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
 import {Navbar,NavbarBrand} from 'reactstrap';
 import './App.css';
 import Menu from './components/MenuCompo.js';
+import {DISHES} from './shared/dishes.js';
 
 class App extends React.Component{
+
+  constructor(props){
+    super(props);
+
+    this.state = {
+      dishes: DISHES,
+    }
+  }
 
   render() {
     return (
@@ -14,7 +22,7 @@ class App extends React.Component{
              <NavbarBrand href="http://localhost:3001/index.html" target="_blank">Ristorante</NavbarBrand>
           </div>
         </Navbar>
-        <Menu />
+        <Menu dishes={this.state.dishes} />
       </div>
     );
   }
