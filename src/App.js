@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import {Navbar,NavbarBrand} from 'reactstrap';
 import './App.css';
+import Menu from './components/MenuCompo.js';
 
 class App extends React.Component{
 
@@ -10,9 +11,10 @@ class App extends React.Component{
       <div className="App">
         <Navbar dark color="primary">
           <div className="container">
-             <NavbarBrand href="https://reactjs.org" target="_blank">React</NavbarBrand>
+             <NavbarBrand href="http://localhost:3001/index.html" target="_blank">Ristorante</NavbarBrand>
           </div>
         </Navbar>
+        <Menu />
       </div>
     );
   }
