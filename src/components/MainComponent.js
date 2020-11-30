@@ -3,6 +3,7 @@ import {CardImgOverlay,CardText} from 'reactstrap';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './HomeComponent';
+import About from './AboutComponent';
 import Menu from './MenuComponent';
 import Contact from './ContactComponent';
 import DishDetail from './DishdetailsComponent'
@@ -10,7 +11,6 @@ import {DISHES} from '../shared/dishes';
 import {PROMOTIONS} from '../shared/promotions';
 import {LEADERS} from '../shared/leaders';
 import {COMMENTS} from '../shared/comments';
-
 import { Switch,Route,Redirect } from 'react-router-dom';
 
 class Main extends React.Component{
@@ -23,7 +23,6 @@ class Main extends React.Component{
       comments: COMMENTS,
       leaders: LEADERS,
       promotions: PROMOTIONS,
-      selectedDishId: null,
       enteredDishId: null,
     };
   }
@@ -67,16 +66,28 @@ class Main extends React.Component{
               displayDish={(dish)=>this.displayDish(dish)} />
       );
     }
+    const DishInfoPage = ({match,location,history})=>{
+      return(
+        <DishDetail dish={this.state.dishes.filter((dish)=> dish.id=== parseInt(match.params.dish_id,10))[0]}
+        comments={this.state.comments.filter((c)=> c.dishId===parseInt(match.params.dish_id,10))} />
+      );
+    }
+    const AboutPage = ()=>{
+      return(
+        <About leaders={this.state.leaders} />
+      );
+    }
     return (
       <div className="Main">
         <Header />
         <Switch>
           <Route component={HomePage} path='/home' />
           <Route component={MenuPage} exact path='/menu' />
+          <Route component={DishInfoPage} path='/menu/:dish_id' />
           <Route component={Contact} exact path='/contactus' />
+          <Route component={AboutPage} exact path='/aboutus' />
           <Redirect to='/home' />
         </Switch>
-        {/* <DishDetail dish={this.state.dishes.filter((dish) => dish.id === this.state.selectedDishId)[0]} /> */}
         <Footer />
       </div>
     );

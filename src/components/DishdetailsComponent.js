@@ -1,5 +1,6 @@
 import React from 'react';
-import {Card,CardImg,CardImgOverlay,CardText,CardTitle} from 'reactstrap';
+import {Card,CardImg,CardImgOverlay,CardText,CardTitle,Breadcrumb,BreadcrumbItem} from 'reactstrap';
+import {Link} from 'react-router-dom';
 
 const DisplayDish = ({dish}) => {
     return(
@@ -12,8 +13,8 @@ const DisplayDish = ({dish}) => {
         </Card>
     );
 }  
-const DisplayReviews = ({dish}) => {
-    const comment = dish.comments.map((c)=>{
+const DisplayReviews = ({comments}) => {
+    const comment = comments.map((c)=>{
         return(   
             <div>       
                 <p className="m-1">{c.comment}</p>
@@ -38,12 +39,22 @@ const DishDetail = (props) => {
     else{
         return(
             <div className="container">
+                <div className="row">
+                    <Breadcrumb>
+                        <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
+                        <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+                    </Breadcrumb>
+                    <div className="col-12">
+                        <h3>{props.dish.name}</h3>
+                        <hr />
+                    </div>                
+                </div>
                 <div className="row" key={props.dish.id} >
                     <div  className="col-12 col-md-5 m-1">
                         <DisplayDish dish={props.dish} />
                     </div>
                     <div className="col-12 col-md-5 m-1">
-                        <DisplayReviews dish={props.dish} />
+                        <DisplayReviews comments={props.comments} />
                     </div>
                 </div>
             </div>
