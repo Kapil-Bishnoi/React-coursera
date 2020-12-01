@@ -7,10 +7,10 @@ function About(props){
     const leaders = props.leaders.map((leader) => {
         return (
             <Media className="mt-5">
-                <Media left className="mr-5" href="#">
+                <Media left className="mr-5">
                     <Media object src={leader.image} alt={leader.name} />
                 </Media>
-                <Media body >
+                <Media body  >
                     <Media heading >
                         {leader.name}
                     </Media>
@@ -18,7 +18,9 @@ function About(props){
                         {leader.designation}
                         <hr />
                     </Media>
-                    {leader.description}
+                    <div className="d-sm-block d-none">
+                        {leader.description}
+                    </div>
                 </Media>
             </Media>
         );
