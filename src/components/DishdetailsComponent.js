@@ -30,8 +30,8 @@ const DisplayReviews = ({comments}) => {
     );
 }
 
-const DishDetail = (props) => {
-    if(props.dish===null || props.dish===undefined){
+const DishDetail = (props=null) => {  //javaScript way to set an undefine value to a default value
+    if(props.dish===null){
         return(
             <div></div>
         );

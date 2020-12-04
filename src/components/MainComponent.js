@@ -7,11 +7,19 @@ import About from './AboutComponent';
 import Menu from './MenuComponent';
 import Contact from './ContactComponent';
 import DishDetail from './DishdetailsComponent'
-import {DISHES} from '../shared/dishes';
-import {PROMOTIONS} from '../shared/promotions';
-import {LEADERS} from '../shared/leaders';
-import {COMMENTS} from '../shared/comments';
-import { Switch,Route,Redirect } from 'react-router-dom';
+import { Switch,Route,Redirect,withRouter } from 'react-router-dom';
+import {connect} from 'react-redux';
+
+const mapStateToProps = (state) => {
+  return(
+    {
+      dishes: state.dishes,
+      comments: state.comments,
+      leaders: state.leaders,
+      promotions: state.promotions
+    }
+  );
+}
 
 class Main extends React.Component{
 
@@ -19,24 +27,16 @@ class Main extends React.Component{
     super(props);
 
     this.state = {
-      dishes: DISHES,
-      comments: COMMENTS,
-      leaders: LEADERS,
-      promotions: PROMOTIONS,
-      enteredDishId: null,
+      enteredDishId: null
     };
   }
+
   onDishEnter(dishId){
     this.setState({
         enteredDishId:dishId
     });
   }
-  onDishClick(dishId){
-    this.setState({
-        selectedDishId:dishId
-    });
-  }
-  displayDish(dish){
+  displayLittleDishInfo(dish){
     if(this.state.enteredDishId!==null && dish.id===this.state.enteredDishId){
         return(
             <CardImgOverlay>
@@ -53,28 +53,32 @@ class Main extends React.Component{
 
     const HomePage = ()=>{
       return(
-        <Home dish={this.state.dishes.filter((dish)=>dish.featured===true)[0]}
-              promotion={this.state.promotions.filter((pro)=>pro.featured===true)[0]}
-              leader={this.state.leaders.filter((lead)=>lead.featured===true)[0]} />
+        <Home dish={this.props.dishes.filter((dish)=>dish.featured===true)[0]}
+              promotion={this.props.promotions.filter((pro)=>pro.featured===true)[0]}
+              leader={this.props.leaders.filter((lead)=>lead.featured===true)[0]} />
       );
     }
     const MenuPage = ()=>{
       return(
-        <Menu dishes={this.state.dishes}
-              onClick={(dishId)=> this.onDishClick(dishId)} 
-              onMouseEnter={(dishId)=>this.onDishEnter(dishId)}
-              displayDish={(dish)=>this.displayDish(dish)} />
+        <Menu dishes={this.props.dishes}
+              onDishEnter={(dishId)=>this.onDishEnter(dishId)}
+              displayLittleDishInfo={(dish)=>this.displayLittleDishInfo(dish)} />
       );
     }
     const DishInfoPage = ({match,location,history})=>{
       return(
-        <DishDetail dish={this.state.dishes.filter((dish)=> dish.id=== parseInt(match.params.dish_id,10))[0]}
-        comments={this.state.comments.filter((c)=> c.dishId===parseInt(match.params.dish_id,10))} />
+        <DishDetail dish={this.props.dishes.filter((dish)=> dish.id=== parseInt(match.params.dish_id,10))[0]}
+        comments={this.props.comments.filter((c)=> c.dishId===parseInt(match.params.dish_id,10))} />
+      );
+    }
+    const ContactPage = () => {
+      return(
+        <Contact />
       );
     }
     const AboutPage = ()=>{
       return(
-        <About leaders={this.state.leaders} />
+        <About leaders={this.props.leaders} />
       );
     }
     return (
@@ -84,7 +88,7 @@ class Main extends React.Component{
           <Route component={HomePage} path='/home' />
           <Route component={MenuPage} exact path='/menu' />
           <Route component={DishInfoPage} path='/menu/:dish_id' />
-          <Route component={Contact} exact path='/contactus' />
+          <Route component={ContactPage} exact path='/contactus' />
           <Route component={AboutPage} exact path='/aboutus' />
           <Redirect to='/home' />
         </Switch>
@@ -94,5 +98,5 @@ class Main extends React.Component{
   }
 }
 
-export default Main ;
+export default withRouter(connect(mapStateToProps)(Main)) ;
 
