@@ -6,7 +6,7 @@ import Home from './HomeComponent';
 import About from './AboutComponent';
 import Menu from './MenuComponent';
 import Contact from './ContactComponent';
-import DishDetail from './DishdetailsComponent'
+import DishDetail from './DishdetailsComponent';
 import { Switch,Route,Redirect,withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
 
@@ -16,7 +16,8 @@ const mapStateToProps = (state) => {
       dishes: state.dishes,
       comments: state.comments,
       leaders: state.leaders,
-      promotions: state.promotions
+      promotions: state.promotions,
+      // isCommentModalOpen: state.isCommentModalOpen
     }
   );
 }
@@ -27,8 +28,16 @@ class Main extends React.Component{
     super(props);
 
     this.state = {
-      enteredDishId: null
+      enteredDishId: null,
+      isCommentModalOpen: false
     };
+    
+  }
+
+  toggleCommentModal(){
+    this.setState({
+        isCommentModalOpen: !(this.state.isCommentModalOpen)
+    });
   }
 
   onDishEnter(dishId){
@@ -68,7 +77,9 @@ class Main extends React.Component{
     const DishInfoPage = ({match,location,history})=>{
       return(
         <DishDetail dish={this.props.dishes.filter((dish)=> dish.id=== parseInt(match.params.dish_id,10))[0]}
-        comments={this.props.comments.filter((c)=> c.dishId===parseInt(match.params.dish_id,10))} />
+        comments={this.props.comments.filter((c)=> c.dishId===parseInt(match.params.dish_id,10))}
+        toggleCommentModal={() => this.toggleCommentModal()}
+         />
       );
     }
     const ContactPage = () => {
@@ -83,7 +94,7 @@ class Main extends React.Component{
     }
     return (
       <div className="Main">
-        <Header />
+        <Header isCommentModalOpen={this.state.isCommentModalOpen} toggleCommentModal={() => this.toggleCommentModal()}  />
         <Switch>
           <Route component={HomePage} path='/home' />
           <Route component={MenuPage} exact path='/menu' />

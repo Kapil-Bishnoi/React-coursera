@@ -10,7 +10,7 @@ function RenderMenuItem({dish,onDishEnter,displayLittleDishInfo}){
             <CardImgOverlay>
                <CardTitle > {dish.name} </CardTitle>
                {displayLittleDishInfo(dish)}
-            </CardImgOverlay>
+            </CardImgOverlay> 
             </Card>
         </Link>
     );

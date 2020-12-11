@@ -1,7 +1,14 @@
 import React from 'react';
 import {Breadcrumb, BreadcrumbItem, Label, Row, Col, Button } from 'reactstrap';
-import {Link , NavLink} from 'react-router-dom';
+import {Link } from 'react-router-dom';
 import {LocalForm,Control,Errors} from 'react-redux-form';
+import {initialFeedbackFormState} from '../redux/reducer';
+
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => val && (val.length >= len);
+const isNumber = (val) => !isNaN(Number(val));
+const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
 class Contact extends React.Component{
 
@@ -61,33 +68,75 @@ class Contact extends React.Component{
                         <h3>Send us Your Feedback</h3>
                     </div>
                     <div className="col-12 col-md-9">
-                        <LocalForm onSubmit={(values) => this.handleFormSubmit(values)}>
+                        <LocalForm onSubmit={(values=initialFeedbackFormState) => this.handleFormSubmit(values)}>
                             <Row className="form-group">
                                 <Label htmlFor="fullname" md={2} >Full Name</Label>
                                 <Col md={10} >
                                     <Control.text model=".fullname" id="fullname" name="fullname"
-                                        placeholder="Full Name" className="form-control" />
+                                        placeholder="Full Name" className="form-control"
+                                        validators={{
+                                            required,minLength: minLength(3),maxLength: maxLength(30)
+                                        }} 
+                                    />
+                                    <Errors 
+                                        className="text-danger" 
+                                        model=".fullname" 
+                                        show={{touched:true,focus:false}}
+                                        messages={{
+                                            required: 'Required',
+                                            minLength: 'Must be atleast 3 characters',
+                                            maxLength: 'Must not be greater than 30 characters'
+                                        }}
+                                    />
                                 </Col>
                             </Row>
                             <Row className="form-group">
                                 <Label htmlFor="telnum" md={2} >Tel. Number</Label>
                                 <Col md={10} >
-                                    <Control.text modal=".telnum" id="telnum" name="telnum"
-                                        placeholder="contact number" className="form-control" />
+                                    <Control.text model=".telnum" id="telnum" name="telnum"
+                                        placeholder="contact number" className="form-control"
+                                        validators={{
+                                            required,minLength: minLength(3),maxLength: maxLength(15),isNumber
+                                        }} 
+                                    />
+                                    <Errors 
+                                        className="text-danger" 
+                                        model=".telnum" 
+                                        show={{touched:true,focus:false}}
+                                        messages={{
+                                            required: 'Required',
+                                            minLength: 'Must be atleast 3 digits',
+                                            maxLength: 'Must not be greater than 15 digits',
+                                            isNumber: 'Must be a number'
+                                        }}
+                                    />
                                 </Col>
                             </Row>
                             <Row className="form-group">
                                 <Label htmlFor="email" md={2} >Email</Label>
                                 <Col md={10} >
-                                    <Control.text modal=".email" id="email" name="email"
-                                        placeholder="Email Id" className="form-control" />  
+                                    <Control.text model=".email" id="email" name="email"
+                                        placeholder="Email Id" className="form-control"
+                                        validators={{
+                                            required,validEmail
+                                        }} 
+                                    />
+                                    <Errors 
+                                        className="text-danger" 
+                                        model=".email" 
+                                        show={{touched:true,focus:false}}
+                                        messages={{
+                                            required: 'Required',
+                                            validEmail: "Invalid Email address"
+                                        }}
+                                    />  
                                 </Col>
                             </Row>
                             <Row className="form-group">
                                 <Col md={{size:6,offset:2}}>
                                     <div className="form-check" >
                                         <Label check>
-                                            <Control.checkbox modal=".isAgree" name="isAgree" className="form-check-input" /> {' '}
+                                            <Control.checkbox model=".isAgree" name="isAgree" className="form-check-input" /> {' '}
                                             <strong>May we contact you?</strong>
                                         </Label>
                                     </div>
