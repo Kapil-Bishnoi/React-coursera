@@ -37,12 +37,6 @@ class Header extends React.Component{
         event.preventDefault();
     }
 
-    handleCommentFormSubmit(values){
-        this.props.toggleCommentModal(); //close the modal
-        console.log("Comment is submitted "+JSON.stringify(values));
-        alert("Comment is submited "+JSON.stringify(values));
-    }
-
     render(){
         return(
         <React.Fragment>
@@ -124,66 +118,6 @@ class Header extends React.Component{
                             </Button>
                         </FormGroup>
                     </Form>
-                </ModalBody>
-            </Modal>
-            <Modal isOpen={this.props.isCommentModalOpen} toggle={() => this.props.toggleCommentModal()} >
-                <ModalHeader toggle={() => this.props.toggleCommentModal()} >Submit Comment</ModalHeader>
-                <ModalBody>
-                    <LocalForm onSubmit={(values) => this.handleCommentFormSubmit(values)}>
-                        <Row className="form-group">
-                            <Col md={2}>
-                                <Label htmlFor="rating">Rating</Label>
-                            </Col>
-                            <Col>
-                            <Control.select model=".rating" id="rating" name="rating" className="form-control">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </Control.select>
-                            </Col>
-                        </Row>
-                        <Row className="form-group">
-                            <Label htmlFor="yourname" md={2} >Your Name</Label>
-                            <Col >
-                                <Control.text model=".yourname" id="yourname" name="yourname"placeholder="Your Name" 
-                                    className="form-control"
-                                    validators={{
-                                        required,minLength: minLength(3),maxLength: maxLength(30)
-                                    }}  
-                                />
-                                    <Errors 
-                                        className="text-danger" 
-                                        model=".yourname" 
-                                        show="touched"
-                                        messages={{
-                                            required: 'Required',
-                                            minLength: 'Must be atleast 3 characters',
-                                            maxLength: 'Must not be greater than 30 characters'
-                                        }}
-                                    />
-                            </Col>
-                        </Row>
-                        <Row className="form-group">
-                            <Label htmlFor="comment" md={2}>Comment</Label>
-                            <Col>
-                            <Control.textarea model=".comment" id="comment" name="comment"
-                                placeholder="Let's Comment on Food" className="form-control" rows="4"
-                            />
-                            </Col>
-                        </Row>
-                        <Row className="form-group">
-                            <Col md={{offset:2, size:10}}>
-                                <Button type="submit" color="primary">
-                                    Send
-                                </Button>
-                                <Button className="ml-2" onClick={() => this.props.toggleCommentModal()} >
-                                    Cancel
-                                </Button>
-                            </Col>
-                        </Row>
-                    </LocalForm>
                 </ModalBody>
             </Modal>
         </React.Fragment>

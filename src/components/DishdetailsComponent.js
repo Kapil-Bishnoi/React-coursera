@@ -1,6 +1,11 @@
 import React from 'react';
-import {Card,CardImg,CardImgOverlay,CardText,CardTitle,Breadcrumb,BreadcrumbItem, CardFooter, Button, CardHeader, Modal, ModalHeader, ModalBody} from 'reactstrap';
+import {Row, Col, Label, Card,CardImg,CardImgOverlay,CardText,CardTitle,Breadcrumb,BreadcrumbItem, CardFooter, Button, CardHeader, Modal, ModalHeader, ModalBody} from 'reactstrap';
 import {Link} from 'react-router-dom';
+import {LocalForm,Control,Errors} from 'react-redux-form';
+
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => val && (val.length >= len);
 
 
 const DisplayDish = ({dish}) => {
@@ -14,7 +19,7 @@ const DisplayDish = ({dish}) => {
         </Card>
     );
 }  
-const DisplayReviews = ({comments,toggleCommentModal}) => {
+const DisplayReviews = ({comments,addComment,dishId}) => {
     const comment = comments.map((c)=>{
         return(   
             <div>       
@@ -28,12 +33,102 @@ const DisplayReviews = ({comments,toggleCommentModal}) => {
            <CardHeader ><h4>Reviews</h4></CardHeader>
            <CardText>{comment}</CardText>
            <CardFooter>
-               <Button onClick={() => toggleCommentModal()}>
-                  <span className="fa fa-comment fa-lg" /> Submit Comment
-               </Button>
+               <CommentForm addComment={addComment} dishId={dishId} />
            </CardFooter>
         </Card>
     );
+}
+
+class CommentForm extends React.Component{
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            isCommentModalOpen: false,
+        };
+        this.toggleCommentModal = this.toggleCommentModal.bind(this);
+        this.handleCommentFormSubmit = this.handleCommentFormSubmit.bind(this);
+    }
+
+    toggleCommentModal(){
+        this.setState({
+            isCommentModalOpen: !(this.state.isCommentModalOpen),
+        });
+    }
+
+    handleCommentFormSubmit(values){
+        this.toggleCommentModal();
+        this.props.addComment(this.props.dishId,values.yourname,values.rating,values.comment);
+    }
+
+    render(){
+        return(
+            <div>
+                <Button outline onClick={this.toggleCommentModal}><span className="fa fa-comment"></span> Submit Comment</Button>
+                <Modal isOpen={this.state.isCommentModalOpen} toggle={this.toggleCommentModal}>
+                <ModalHeader toggle={this.toggleCommentModal}>Submit Comment</ModalHeader>
+                <ModalBody>
+                <LocalForm onSubmit={(values) => this.handleCommentFormSubmit(values)}>
+                        <Row className="form-group">
+                            <Col md={2}>
+                                <Label htmlFor="rating">Rating</Label>
+                            </Col>
+                            <Col>
+                            <Control.select model=".rating" id="rating" name="rating" className="form-control">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </Control.select>
+                            </Col>
+                        </Row>
+                        <Row className="form-group">
+                            <Label htmlFor="yourname" md={2} >Your Name</Label>
+                            <Col >
+                                <Control.text model=".yourname" id="yourname" name="yourname"placeholder="Your Name" 
+                                    className="form-control"
+                                    validators={{
+                                        required,minLength: minLength(3),maxLength: maxLength(30)
+                                    }}  
+                                />
+                                    <Errors 
+                                        className="text-danger" 
+                                        model=".yourname" 
+                                        show="touched"
+                                        messages={{
+                                            required: 'Required',
+                                            minLength: 'Must be atleast 3 characters',
+                                            maxLength: 'Must not be greater than 30 characters'
+                                        }}
+                                    />
+                            </Col>
+                        </Row>
+                        <Row className="form-group">
+                            <Label htmlFor="comment" md={2}>Comment</Label>
+                            <Col>
+                            <Control.textarea model=".comment" id="comment" name="comment"
+                                placeholder="Let's Comment on Food" className="form-control" rows="4"
+                            />
+                            </Col>
+                        </Row>
+                        <Row className="form-group">
+                            <Col md={{offset:2, size:10}}>
+                                <Button type="submit" color="primary">
+                                    Submit
+                                </Button>
+                                <Button className="ml-2" onClick={() => this.props.toggleCommentModal()} >
+                                    Cancel
+                                </Button>
+                            </Col>
+                        </Row>
+                    </LocalForm>
+                </ModalBody>
+                </Modal>
+            </div>
+        );
+    }
 }
 
 const DishDetail = (props) => {
@@ -61,7 +156,10 @@ const DishDetail = (props) => {
                         <DisplayDish dish={props.dish} />
                     </div>
                     <div className="col-12 col-md-5 m-1">
-                        <DisplayReviews comments={props.comments} toggleCommentModal={props.toggleCommentModal} />
+                        <DisplayReviews comments={props.comments}
+                            addComment={props.addComment}
+                            dishId={props.dish.id} 
+                        />
                     </div>
                 </div>
             </div>

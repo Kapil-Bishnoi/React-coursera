@@ -9,8 +9,10 @@ import Contact from './ContactComponent';
 import DishDetail from './DishdetailsComponent';
 import { Switch,Route,Redirect,withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
+import {addComment } from '../redux/ActionCreators';
 
-const mapStateToProps = (state) => { //maping redux state to props
+
+const mapStateToProps = (state) =>{ //maping redux state to props
   return(
     {
       dishes: state.dishes,
@@ -20,6 +22,9 @@ const mapStateToProps = (state) => { //maping redux state to props
     }
   );
 }
+const mapDispatchToProps = (dispatch) =>({
+  addComment: (dishId,author,rating,comment) => dispatch(addComment(dishId,author,rating,comment))
+});
 
 class Main extends React.Component{
 
@@ -27,16 +32,9 @@ class Main extends React.Component{
     super(props);
 
     this.state = {
-      enteredDishId: null,
-      isCommentModalOpen: false
+      enteredDishId: null
     };
     
-  }
-
-  toggleCommentModal(){
-    this.setState({
-        isCommentModalOpen: !(this.state.isCommentModalOpen)
-    });
   }
 
   onDishEnter(dishId){
@@ -77,8 +75,7 @@ class Main extends React.Component{
       return(
         <DishDetail dish={this.props.dishes.filter((dish)=> dish.id=== parseInt(match.params.dish_id,10))[0]}
         comments={this.props.comments.filter((c)=> c.dishId===parseInt(match.params.dish_id,10))}
-        toggleCommentModal={() => this.toggleCommentModal()}
-        
+        addComment={this.props.addComment}
         />
       );
     }
@@ -94,7 +91,7 @@ class Main extends React.Component{
     }
     return (
       <div className="Main">
-        <Header isCommentModalOpen={this.state.isCommentModalOpen} toggleCommentModal={() => this.toggleCommentModal()}  />
+        <Header />
         <Switch>
           <Route component={HomePage} path='/home' />
           <Route component={MenuPage} exact path='/menu' />
@@ -109,5 +106,5 @@ class Main extends React.Component{
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Main)) ;
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Main)) ;
 
