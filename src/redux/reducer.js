@@ -8,17 +8,8 @@ export const initialState = {
     comments: COMMENTS,
     leaders: LEADERS,
     promotions: PROMOTIONS,
-    // isCommentModalOpen: false
 };
-export const initialFeedbackFormState = {
-    fullname: '',
-    telnum: '',
-    email: '',
-    isAgree: false,
-    contactType: "Tel.",
-    message: ''
-}
 
-export const Reducer = (state=initialState,action) => { //(state=initialState) is used to set default value to undefined object or var 
+export const Reducer = (state=initialState,action) => { 
     return state;
 }

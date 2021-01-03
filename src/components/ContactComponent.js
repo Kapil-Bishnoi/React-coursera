@@ -2,7 +2,6 @@ import React from 'react';
 import {Breadcrumb, BreadcrumbItem, Label, Row, Col, Button } from 'reactstrap';
 import {Link } from 'react-router-dom';
 import {LocalForm,Control,Errors} from 'react-redux-form';
-import {initialFeedbackFormState} from '../redux/reducer';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -68,7 +67,7 @@ class Contact extends React.Component{
                         <h3>Send us Your Feedback</h3>
                     </div>
                     <div className="col-12 col-md-9">
-                        <LocalForm onSubmit={(values=initialFeedbackFormState) => this.handleFormSubmit(values)}>
+                        <LocalForm onSubmit={(values) => this.handleFormSubmit(values)}>
                             <Row className="form-group">
                                 <Label htmlFor="fullname" md={2} >Full Name</Label>
                                 <Col md={10} >

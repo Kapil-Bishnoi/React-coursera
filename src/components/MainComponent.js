@@ -10,14 +10,13 @@ import DishDetail from './DishdetailsComponent';
 import { Switch,Route,Redirect,withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state) => { //maping redux state to props
   return(
     {
       dishes: state.dishes,
       comments: state.comments,
       leaders: state.leaders,
       promotions: state.promotions,
-      // isCommentModalOpen: state.isCommentModalOpen
     }
   );
 }
@@ -46,7 +45,7 @@ class Main extends React.Component{
     });
   }
   displayLittleDishInfo(dish){
-    if(this.state.enteredDishId!==null && dish.id===this.state.enteredDishId){
+    if(this.state.enteredDishId!==null && this.state.enteredDishId===dish.id){
         return(
             <CardImgOverlay>
                 <CardText className="mt-4">{dish.description}</CardText>
@@ -79,7 +78,8 @@ class Main extends React.Component{
         <DishDetail dish={this.props.dishes.filter((dish)=> dish.id=== parseInt(match.params.dish_id,10))[0]}
         comments={this.props.comments.filter((c)=> c.dishId===parseInt(match.params.dish_id,10))}
         toggleCommentModal={() => this.toggleCommentModal()}
-         />
+        
+        />
       );
     }
     const ContactPage = () => {
