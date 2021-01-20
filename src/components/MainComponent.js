@@ -9,7 +9,7 @@ import Contact from './ContactComponent';
 import DishDetail from './DishdetailsComponent';
 import { Switch,Route,Redirect,withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
-import {addComment } from '../redux/ActionCreators';
+import {addComment, fetchDishes } from '../redux/ActionCreators';
 
 
 const mapStateToProps = (state) =>{ //maping redux state to props
@@ -23,7 +23,8 @@ const mapStateToProps = (state) =>{ //maping redux state to props
   );
 }
 const mapDispatchToProps = (dispatch) =>({
-  addComment: (dishId,author,rating,comment) => dispatch(addComment(dishId,author,rating,comment))
+  addComment: (dishId,author,rating,comment) => dispatch(addComment(dishId,author,rating,comment)),
+  fetchDishes: () => {dispatch(fetchDishes())}
 });
 
 class Main extends React.Component{
@@ -35,6 +36,10 @@ class Main extends React.Component{
       enteredDishId: null
     };
     
+  }
+
+  componentDidMount(){
+    this.props.fetchDishes();
   }
 
   onDishEnter(dishId){
@@ -59,7 +64,9 @@ class Main extends React.Component{
 
     const HomePage = ()=>{
       return(
-        <Home dish={this.props.dishes.filter((dish)=>dish.featured===true)[0]}
+        <Home dish={this.props.dishes.dishes.filter((dish)=>dish.featured===true)[0]}
+              isdishesLoading={this.props.dishes.isLoading}
+              dishesErrMsg={this.props.dishes.errMsg}
               promotion={this.props.promotions.filter((pro)=>pro.featured===true)[0]}
               leader={this.props.leaders.filter((lead)=>lead.featured===true)[0]} />
       );
@@ -73,7 +80,9 @@ class Main extends React.Component{
     }
     const DishInfoPage = ({match,location,history})=>{
       return(
-        <DishDetail dish={this.props.dishes.filter((dish)=> dish.id=== parseInt(match.params.dish_id,10))[0]}
+        <DishDetail dish={this.props.dishes.dishes.filter((dish)=> dish.id=== parseInt(match.params.dish_id,10))[0]}
+        isLoading={this.props.dishes.isLoading}
+        errMsg={this.props.dishes.errMsg}
         comments={this.props.comments.filter((c)=> c.dishId===parseInt(match.params.dish_id,10))}
         addComment={this.props.addComment}
         />

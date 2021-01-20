@@ -2,24 +2,25 @@ import React from 'react';
 import {Row, Col, Label, Card,CardImg,CardImgOverlay,CardText,CardTitle,Breadcrumb,BreadcrumbItem, CardFooter, Button, CardHeader, Modal, ModalHeader, ModalBody} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import {LocalForm,Control,Errors} from 'react-redux-form';
+import {Loading} from './LoadingComponent';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => val && (val.length >= len);
 
 
-const DisplayDish = ({dish}) => {
+const DisplayDish = ({dish,isLoading,errMsg}) => {
     return(
         <Card>
-          <CardImg width="100%" src={dish.image} alt={dish.name}></CardImg>
-          <CardImgOverlay>
+            <CardImg width="100%" src={dish.image} alt={dish.name}></CardImg>
+            <CardImgOverlay>
             <CardTitle>{dish.name}</CardTitle>
             <CardText>{dish.description}</CardText>
-          </CardImgOverlay>
+            </CardImgOverlay>
         </Card>
     );
 }  
-const DisplayReviews = ({comments,addComment,dishId}) => {
+const DisplayReviews = ({comments,addComment,dishId,isLoading,errMsg}) => {
     const comment = comments.map((c)=>{
         return(   
             <div>       
@@ -30,11 +31,11 @@ const DisplayReviews = ({comments,addComment,dishId}) => {
     });
     return(
         <Card>
-           <CardHeader ><h4>Reviews</h4></CardHeader>
-           <CardText>{comment}</CardText>
-           <CardFooter>
-               <CommentForm addComment={addComment} dishId={dishId} />
-           </CardFooter>
+            <CardHeader ><h4>Reviews</h4></CardHeader>
+            <CardText>{comment}</CardText>
+            <CardFooter>
+                <CommentForm addComment={addComment} dishId={dishId} />
+            </CardFooter>
         </Card>
     );
 }
@@ -132,13 +133,30 @@ class CommentForm extends React.Component{
 }
 
 const DishDetail = (props) => {
-    if(props.dish===null){
+    if(props.isLoading){
+        return(
+            <div className="container">
+                <div className="row">
+                    <Loading />
+                </div>
+            </div>
+        );
+    }
+    else if(props.errMsg){
+        return(
+            <div className="container">
+                <div className="row">
+                    <h4>{props.errMsg}</h4>
+                </div>
+            </div>
+        );
+    }
+    else if(props.dish===null){
         return(
             <div></div>
         );
     }
     else{
-
         return(
             <div className="container">
                 <div className="row">
