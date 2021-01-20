@@ -1,5 +1,4 @@
 import React from 'react';
-import {CardImgOverlay,CardText} from 'reactstrap';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './HomeComponent';
@@ -10,7 +9,7 @@ import DishDetail from './DishdetailsComponent';
 import { Switch,Route,Redirect,withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
 import {addComment, fetchDishes } from '../redux/ActionCreators';
-
+import {actions} from 'react-redux-form';
 
 const mapStateToProps = (state) =>{ //maping redux state to props
   return(
@@ -25,7 +24,8 @@ const mapStateToProps = (state) =>{ //maping redux state to props
 
 const mapDispatchToProps = (dispatch) =>({
   addComment: (dishId,author,rating,comment) => {dispatch(addComment(dishId,author,rating,comment))},
-  fetchDishes: () => {dispatch(fetchDishes())}
+  fetchDishes: () => {dispatch(fetchDishes())},
+  resetFeedbackForm: () => { dispatch(actions.reset('feedback')) },
 });
 
 class Main extends React.Component{
@@ -66,7 +66,7 @@ class Main extends React.Component{
     }
     const ContactPage = () => {
       return(
-        <Contact />
+        <Contact resetFeedbackForm={this.props.resetFeedbackForm} />
       );
     }
     const AboutPage = ()=>{
