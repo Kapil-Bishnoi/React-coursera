@@ -19,7 +19,10 @@ function DisplayHomeCard({item,isdishesLoading,dishesErrMsg}){
             <Card>
                 <CardImg src={item.image} alt={item.name} />
                 <CardBody>
-                    <CardTitle>{item.name}</CardTitle>
+                    <CardTitle>
+                        {/* {item.name} */}
+                        Jenn
+                    </CardTitle>
                     {item.designation ? <CardSubtitle>{item.designation}</CardSubtitle> : null}
                     <CardText>{item.description}</CardText>
                 </CardBody>

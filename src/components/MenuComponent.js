@@ -1,16 +1,16 @@
 import React from 'react';
-import {Card,CardImg,CardImgOverlay,CardTitle,Breadcrumb, BreadcrumbItem, CardHeader } from 'reactstrap';
-import {Link , NavLink} from 'react-router-dom';
+import {Card,CardImg,CardImgOverlay,CardTitle,Breadcrumb, BreadcrumbItem, CardHeader, CardFooter, CardText } from 'reactstrap';
+import {Link } from 'react-router-dom';
 import {Loading} from './LoadingComponent';
 
-function RenderMenuItem({dish,onDishEnter,displayLittleDishInfo}){
+function RenderMenuItem({dish}){
     return (
         <Link to={`/menu/${dish.id}`} >
-            <Card  onMouseEnter={()=>onDishEnter(dish.id)}>
+            <Card >
             <CardImg width="100%" src={dish.image} alt={dish.name} />
             <CardImgOverlay>
-                <CardTitle > {dish.name} </CardTitle>
-                {displayLittleDishInfo(dish)}
+                <CardTitle> {dish.name} </CardTitle>
+                <CardText style={{color: "black"}} > {dish.description} </CardText>
             </CardImgOverlay> 
             </Card>
         </Link>
@@ -18,11 +18,11 @@ function RenderMenuItem({dish,onDishEnter,displayLittleDishInfo}){
 }
 
 const Menu = (props) => {
-    
+
     const menu=props.dishes.dishes.map((dish)=>{
         return(
             <div key={dish.id} className="col-12 col-md-5 m-1">
-                <RenderMenuItem dish={dish} onDishEnter={props.onDishEnter} displayLittleDishInfo={props.displayLittleDishInfo} />
+                <RenderMenuItem dish={dish} />
             </div>
         );
     });

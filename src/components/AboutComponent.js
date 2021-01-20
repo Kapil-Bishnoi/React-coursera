@@ -8,11 +8,12 @@ function About(props){
         return (
             <Media className="mt-5">
                 <Media left className="mr-5">
-                    <Media object src={leader.image} alt={leader.name} />
+                    <Media object height="200" src={leader.image} alt={leader.name} />
                 </Media>
                 <Media body  >
                     <Media heading >
-                        {leader.name}
+                        {/* {leader.name} */}
+                        Jenn
                     </Media>
                     <Media >
                         {leader.designation}

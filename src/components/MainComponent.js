@@ -22,42 +22,20 @@ const mapStateToProps = (state) =>{ //maping redux state to props
     }
   );
 }
+
 const mapDispatchToProps = (dispatch) =>({
-  addComment: (dishId,author,rating,comment) => dispatch(addComment(dishId,author,rating,comment)),
+  addComment: (dishId,author,rating,comment) => {dispatch(addComment(dishId,author,rating,comment))},
   fetchDishes: () => {dispatch(fetchDishes())}
 });
 
 class Main extends React.Component{
 
   constructor(props){
-    super(props);
-
-    this.state = {
-      enteredDishId: null
-    };
-    
+    super(props);  
   }
 
   componentDidMount(){
     this.props.fetchDishes();
-  }
-
-  onDishEnter(dishId){
-    this.setState({
-        enteredDishId:dishId
-    });
-  }
-  displayLittleDishInfo(dish){
-    if(this.state.enteredDishId!==null && this.state.enteredDishId===dish.id){
-        return(
-            <CardImgOverlay>
-                <CardText className="mt-4">{dish.description}</CardText>
-            </CardImgOverlay>
-        );
-    }
-    else{
-        return (<div></div>);
-    }
   }
 
   render() {
@@ -73,9 +51,7 @@ class Main extends React.Component{
     }
     const MenuPage = ()=>{
       return(
-        <Menu dishes={this.props.dishes}
-              onDishEnter={(dishId)=>this.onDishEnter(dishId)}
-              displayLittleDishInfo={(dish)=>this.displayLittleDishInfo(dish)} />
+        <Menu dishes={this.props.dishes} />
       );
     }
     const DishInfoPage = ({match,location,history})=>{
