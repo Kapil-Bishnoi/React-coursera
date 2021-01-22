@@ -21,7 +21,7 @@ const DisplayDish = ({dish}) => {
         </Card>
     );
 }  
-const DisplayReviews = ({comments,addComment,dishId}) => {
+const DisplayReviews = ({comments,postComment,dishId}) => {
     const comment = comments.map((c)=>{
         return(   
             <div>       
@@ -35,7 +35,7 @@ const DisplayReviews = ({comments,addComment,dishId}) => {
             <CardHeader ><h4>Reviews</h4></CardHeader>
             <CardText>{comment}</CardText>
             <CardFooter>
-                <CommentForm addComment={addComment} dishId={dishId} />
+                <CommentForm postComment={postComment} dishId={dishId} />
             </CardFooter>
         </Card>
     );
@@ -61,7 +61,7 @@ class CommentForm extends React.Component{
 
     handleCommentFormSubmit(values){
         this.toggleCommentModal();
-        this.props.addComment(this.props.dishId,values.yourname,values.rating,values.comment);
+        this.props.postComment(this.props.dishId,values.yourname,values.rating,values.comment);
     }
 
     render(){
@@ -176,7 +176,7 @@ const DishDetail = (props) => {
                     </div>
                     <div className="col-12 col-md-5 m-1">
                         <DisplayReviews comments={props.comments}
-                            addComment={props.addComment}
+                            postComment={props.postComment}
                             dishId={props.dish.id} 
                         />
                     </div>
