@@ -3,16 +3,17 @@ import {Row, Col, Label, Card,CardImg,CardImgOverlay,CardText,CardTitle,Breadcru
 import {Link} from 'react-router-dom';
 import {LocalForm,Control,Errors} from 'react-redux-form';
 import {Loading} from './LoadingComponent';
+import {ServerBaseUrl} from '../shared/ServerBaseUrl';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => val && (val.length >= len);
 
 
-const DisplayDish = ({dish,isLoading,errMsg}) => {
+const DisplayDish = ({dish}) => {
     return(
         <Card>
-            <CardImg width="100%" src={dish.image} alt={dish.name}></CardImg>
+            <CardImg width="100%" src={ServerBaseUrl + dish.image} alt={dish.name}></CardImg>
             <CardImgOverlay>
             <CardTitle>{dish.name}</CardTitle>
             <CardText>{dish.description}</CardText>
@@ -20,7 +21,7 @@ const DisplayDish = ({dish,isLoading,errMsg}) => {
         </Card>
     );
 }  
-const DisplayReviews = ({comments,addComment,dishId,isLoading,errMsg}) => {
+const DisplayReviews = ({comments,addComment,dishId}) => {
     const comment = comments.map((c)=>{
         return(   
             <div>       
@@ -119,7 +120,7 @@ class CommentForm extends React.Component{
                                 <Button type="submit" color="primary">
                                     Submit
                                 </Button>
-                                <Button className="ml-2" onClick={() => this.props.toggleCommentModal()} >
+                                <Button className="ml-2" onClick={this.toggleCommentModal} >
                                     Cancel
                                 </Button>
                             </Col>
@@ -142,11 +143,11 @@ const DishDetail = (props) => {
             </div>
         );
     }
-    else if(props.errMsg){
+    else if(props.dishesErrMsg || props.commentsErrMsg){
         return(
             <div className="container">
                 <div className="row">
-                    <h4>{props.errMsg}</h4>
+                    <h4>{props.dishesErrMsg + props.commentsErrMsg}</h4>
                 </div>
             </div>
         );
