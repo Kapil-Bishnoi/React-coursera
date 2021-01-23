@@ -47,7 +47,7 @@ function Home(props){
                     <DisplayHomeCard item={props.promotion} isLoading={props.ispromosLoading} errMsg={props.promosErrMsg}  />
                 </div>
                 <div className="col-12 col-sm m-1">
-                    <DisplayHomeCard item={props.leader} />
+                    <DisplayHomeCard item={props.leader} isLoading={props.isleadersLoading} errMsg={props.leadersErrMsg} />
                 </div>
             </div>
         </div>

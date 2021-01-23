@@ -8,7 +8,7 @@ import Contact from './ContactComponent';
 import DishDetail from './DishdetailsComponent';
 import { Switch,Route,Redirect,withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
-import {postComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
+import {postComment, fetchDishes, fetchComments, fetchPromos, fetchLeaders, postFeedbackForm } from '../redux/ActionCreators';
 import {actions} from 'react-redux-form';
 import {TransitionGroup,CSSTransition} from 'react-transition-group';
    
@@ -28,7 +28,9 @@ const mapDispatchToProps = (dispatch) =>({
   fetchDishes: () => {dispatch(fetchDishes())},
   resetFeedbackForm: () => { dispatch(actions.reset('feedback')) },
   fetchPromos: () => {dispatch(fetchPromos())},
-  fetchComments: () => {dispatch(fetchComments())}
+  fetchComments: () => {dispatch(fetchComments())},
+  fetchLeaders: () => {dispatch(fetchLeaders())},
+  postFeedbackForm: (feedback) => {dispatch(postFeedbackForm(feedback))}
 });
 
 class Main extends React.Component{
@@ -40,6 +42,7 @@ class Main extends React.Component{
   componentDidMount(){
     this.props.fetchDishes();
     this.props.fetchPromos();
+    this.props.fetchLeaders();
     this.props.fetchComments();
   }
 
@@ -53,7 +56,9 @@ class Main extends React.Component{
               promotion={this.props.promotions.promotions.filter((pro)=>pro.featured===true)[0]}
               ispromosLoading={this.props.promotions.isLoading}
               promosErrMsg={this.props.promotions.errMsg}
-              leader={this.props.leaders.filter((lead)=>lead.featured===true)[0]} />
+              leader={this.props.leaders.leaders.filter((lead)=>lead.featured===true)[0]}
+              isleadersLoading={this.props.leaders.isLoading}
+              leadersErrMsg={this.props.leaders.errMsg} />
       );
     }
     const MenuPage = ()=>{
@@ -74,7 +79,8 @@ class Main extends React.Component{
     }
     const ContactPage = () => {
       return(
-        <Contact resetFeedbackForm={this.props.resetFeedbackForm} />
+        <Contact  resetFeedbackForm={this.props.resetFeedbackForm}
+                  postFeedbackForm={this.props.postFeedbackForm} />
       );
     }
     const AboutPage = ()=>{
