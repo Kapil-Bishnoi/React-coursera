@@ -1,7 +1,7 @@
 import React from 'react';
 import {Breadcrumb, BreadcrumbItem, Label, Row, Col, Button } from 'reactstrap';
 import {Link } from 'react-router-dom';
-import {Form,Control,Errors,actions} from 'react-redux-form';
+import {Form,Control,Errors} from 'react-redux-form';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -158,9 +158,14 @@ class Contact extends React.Component{
                                 </Col>
                             </Row>
                             <Row className="form-group">
-                                <Col md={{offset:2, size:10}}>
+                                <Col md={{offset:2, size:2}}>
                                     <Button type="submit" color="primary">
                                         Send Feedback
+                                    </Button>
+                                </Col>
+                                <Col md={{offset:1}}>
+                                    <Button onClick={() => this.props.resetFeedbackForm()} color="gray" className="btn-outline-dark">
+                                        Cancel
                                     </Button>
                                 </Col>
                             </Row>

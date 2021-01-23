@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import {Nav, Navbar, NavbarBrand, NavbarToggler, Collapse, NavItem,Jumbotron,Modal,ModalBody,ModalHeader,Button, Form,Row,Col, FormGroup, Label,Input} from 'reactstrap';
-import {LocalForm,Control,Errors} from 'react-redux-form';
+import {Nav, Navbar, NavbarBrand, NavbarToggler, Collapse, NavItem,Jumbotron,Modal,ModalBody,ModalHeader,Button,Row,Col,Label} from 'reactstrap';
+import {Form,Control,Errors} from 'react-redux-form';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -31,10 +31,12 @@ class Header extends React.Component{
         });
     }
     
-    handleLogin(event){
+    handleLogin(values){
+        
+        alert(`Successfully Logged in\n`);
+        console.log(`Successfully Logged in\n`);
         this.toggleLoginModal(); //closes the login popup
-        alert(`Username: ${this.username.value} Password: ${this.password.value} Remember: ${this.remember.checked}`);
-        event.preventDefault();
+
     }
 
     render(){
@@ -43,7 +45,7 @@ class Header extends React.Component{
             <Navbar expand="md" className="Navbar" dark >
                 <div className="container">
                     <NavbarToggler onClick={this.openNavbar} />
-                    <NavbarBrand className="mr-auto" href="http://reactjs.org" target="_blank">
+                    <NavbarBrand className="mr-auto" href="/home">
                         <img src="assets/images/logo.png" alt="Ristorante" width="50" height="40"></img>
                     </NavbarBrand>
                     <Collapse isOpen={this.state.isNavOpen} navbar>
@@ -90,33 +92,69 @@ class Header extends React.Component{
             <Modal isOpen={this.state.isLoginModalOpen} toggle={this.toggleLoginModal} >
                 <ModalHeader toggle={this.toggleLoginModal} >Login</ModalHeader>
                 <ModalBody>
-                    <Form onSubmit={this.handleLogin}>
-                        <FormGroup>
-                            <Label htmlFor="username">Username</Label>
-                            <Input type="text" id="username" name="username"
-                                innerRef={(inputbro)=>{this.username=inputbro}}  />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label htmlFor="password">Password</Label>
-                            <Input type="password" id="password" name="password"
-                                innerRef={(inputbro)=>{this.password=inputbro}} />
-                        </FormGroup>
-                        <FormGroup check>
-                            <Label check >
-                                <Input type="checkbox" id="remember" name="remember"
-                                    innerRef={(inputbro)=>{this.remember=inputbro}} />
-                                Remember me
-                            </Label>
-                            <hr></hr>
-                        </FormGroup>
-                        <FormGroup >
-                            <Button type="submit" value="submit" color="primary">
-                                Login
-                            </Button>
-                            <Button className="ml-2" onClick={this.openLoginModal} >
-                                Cancel
-                            </Button>
-                        </FormGroup>
+                    <Form model="loginForm"  onSubmit={(values) => this.handleLogin(values)} >
+                        <Row className="form-group">
+                            <Label htmlFor="username" md={2} >User Name</Label>
+                            <Col md={10} >
+                                <Control.text model=".username" id="username" name="username"
+                                    placeholder="User Name" className="form-control"
+                                    validators={{
+                                        required,minLength: minLength(3),maxLength: maxLength(30)
+                                    }} 
+                                />
+                                <Errors 
+                                    className="text-danger" 
+                                    model=".username" 
+                                    show={{touched:true,focus:false}}
+                                    messages={{
+                                        required: 'Required',
+                                        minLength: 'Must be atleast 3 characters',
+                                        maxLength: 'Must not be greater than 30 characters'
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                        <Row className="form-group">
+                            <Label htmlFor="password" md={2} >Password</Label>
+                            <Col md={10} >
+                                <Control.text model=".password" type="password" id="password" name="password"
+                                    placeholder="Password" className="form-control"
+                                    validators={{
+                                        required
+                                    }} 
+                                />
+                                <Errors 
+                                    className="text-danger" 
+                                    model=".password" 
+                                    show={{touched:true,focus:false}}
+                                    messages={{
+                                        required: 'Required',
+                                    }}
+                                />
+                            </Col>
+                        </Row>
+                        <Row className="form-group">
+                            <Col md={{size:6,offset:2}}>
+                                <div className="form-check" >
+                                    <Label check>
+                                        <Control.checkbox model=".isAgree" name="isAgree" className="form-check-input" /> {' '}
+                                        <strong>terms and conditions</strong>
+                                    </Label>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row className="form-group">
+                            <Col md={{offset:2, size:2}}>
+                                <Button type="submit" color="primary">
+                                    Login
+                                </Button>
+                            </Col>
+                            <Col md={{offset:1}}>
+                                <Button onClick={() => this.toggleLoginModal()} color="gray" className="btn-outline-dark">
+                                    Cancel
+                                </Button>
+                            </Col>
+                        </Row>
                     </Form>
                 </ModalBody>
             </Modal>
