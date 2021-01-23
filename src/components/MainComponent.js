@@ -86,7 +86,7 @@ class Main extends React.Component{
       <div className="Main">
         <Header />
           <TransitionGroup>
-            <CSSTransition key={this.props.location.key} classNames="page" timeout={300} >
+            <CSSTransition key={this.props.location.key} classNames="page" timeout={200} >
               <Switch>
                 <Route component={HomePage} path='/home' />
                 <Route component={MenuPage} exact path='/menu' />

@@ -1,29 +1,31 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import {Stagger, Fade} from 'react-animation-components';
 
 function About(props){
 
     const leaders = props.leaders.map((leader) => {
         return (
-            <Media className="mt-5">
-                <Media left className="mr-5">
-                    <Media object height="200" src={leader.image} alt={leader.name} />
-                </Media>
-                <Media body  >
-                    <Media heading >
-                        {/* {leader.name} */}
-                        Jenn
+            <Fade in>
+                <Media className="mt-5">
+                    <Media left className="mr-5">
+                        <Media object height="200" src={leader.image} alt={leader.name} />
                     </Media>
-                    <Media >
-                        {leader.designation}
-                        <hr />
+                    <Media body  >
+                        <Media heading >
+                            {leader.name}
+                        </Media>
+                        <Media >
+                            {leader.designation}
+                            <hr />
+                        </Media>
+                        <div className="d-sm-block d-none">
+                            {leader.description}
+                        </div>
                     </Media>
-                    <div className="d-sm-block d-none">
-                        {leader.description}
-                    </div>
                 </Media>
-            </Media>
+            </Fade>
         );
     });
 
@@ -83,7 +85,9 @@ function About(props){
                 </div>
                 <div className="col-12">
                     <Media list>
-                        {leaders}
+                        <Stagger in>
+                            {leaders}
+                        </Stagger>
                     </Media>
                 </div>
             </div>

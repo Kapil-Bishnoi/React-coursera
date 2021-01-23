@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import {LocalForm,Control,Errors} from 'react-redux-form';
 import {Loading} from './LoadingComponent';
 import {ServerBaseUrl} from '../shared/ServerBaseUrl';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -12,28 +13,39 @@ const minLength = (len) => (val) => val && (val.length >= len);
 
 const DisplayDish = ({dish}) => {
     return(
-        <Card>
-            <CardImg width="100%" src={ServerBaseUrl + dish.image} alt={dish.name}></CardImg>
-            <CardImgOverlay>
-            <CardTitle>{dish.name}</CardTitle>
-            <CardText>{dish.description}</CardText>
-            </CardImgOverlay>
-        </Card>
+        <FadeTransform in
+        transformProps={{
+            exitTransform: 'scale(0.5) translateY(-50%)'
+        }}>
+            <Card>
+                <CardImg width="100%" src={ServerBaseUrl + dish.image} alt={dish.name}></CardImg>
+                <CardImgOverlay>
+                    <CardTitle>{dish.name}</CardTitle>
+                    <CardText>{dish.description}</CardText>
+                </CardImgOverlay>
+            </Card>
+        </FadeTransform>
     );
 }  
 const DisplayReviews = ({comments,postComment,dishId}) => {
     const comment = comments.map((c)=>{
         return(   
-            <div>       
-                <p className="m-1" >{c.comment}</p>
-                <p style={{color:"gray"}}>-- {c.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(c.date)))}</p>
-            </div>
+            <Fade in>
+                <div>       
+                    <p className="m-1" >{c.comment}</p>
+                    <p style={{color:"gray"}}>-- {c.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(c.date)))}</p>
+                </div>
+            </Fade>
         );
     });
     return(
         <Card>
             <CardHeader ><h4>Reviews</h4></CardHeader>
-            <CardText>{comment}</CardText>
+                <CardText>
+                    <Stagger in>
+                        {comment}
+                    </Stagger>
+                </CardText>
             <CardFooter>
                 <CommentForm postComment={postComment} dishId={dishId} />
             </CardFooter>
